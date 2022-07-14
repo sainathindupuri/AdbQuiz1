@@ -6,13 +6,10 @@ from azure.storage.blob import BlobServiceClient, ContentSettings, PublicAccess
 
 app = Flask(__name__, template_folder="templates")
 
-connection = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};Server=tcp:adbdatabaseserver.database.windows.net,1433;Database=adbdatabase;Uid=adbserveruser;Pwd=Darshan@07;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30')
+connection = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};Server=tcp:adbsai.database.windows.net,1433;Database=adb;Uid=sainath;Pwd=Shiro@2018;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30')
 
 cursor = connection.cursor()
 
-
-columnNames = ['Name','State', 'Salary', 'Grade', 'Room', 'Telnum', 'Picture', 'Keywords']
-datasetPath = './people.csv'
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -24,7 +21,7 @@ def Hello():
 @app.route('/ShowAllRecords')
 def showAllRecords():
     cursor = connection.cursor()
-    cursor.execute("Select * from data")
+    cursor.execute("select * from quiz1")
     data = cursor.fetchall()
     link = "https://adbimages.blob.core.windows.net/assignment1/"
     return render_template('ShowAllRecords.html',data=data, link=link)
@@ -33,8 +30,9 @@ def showAllRecords():
 @app.route('/ShowDetails', methods=['GET', 'POST'])
 def showDetails():
     cursor = connection.cursor()    
-    classNumber = int(request.form.get("ClassNumber"))    
-    cursor.execute("select * from dbo.data where class ={}".format(classNumber))
+    startAge = int(request.form.get("StartAge"))    
+    endAge = int(request.form.get("EndAge"))    
+    cursor.execute("select * from dbo.[data-1] where class>={} AND class <={}".format(startAge,endAge))
     data = cursor.fetchall()
     link = "https://adbimages.blob.core.windows.net/assignment1/"
     return render_template('ShowDetails.html', data = data, link = link)   
