@@ -35,7 +35,7 @@ def showDetails():
     cursor.execute("select * from dbo.[data-1] where class>={} AND class <={}".format(startAge,endAge))
     data = cursor.fetchall()
     link = "https://adbimages.blob.core.windows.net/assignment1/"
-    return render_template('ShowDetails.html', data = data, link = link)   
+    return render_template('showDetails.html', data = data, link = link)   
 
 @app.route('/Modify', methods=['GET', 'POST'])
 def update():
