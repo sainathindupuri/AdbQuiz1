@@ -37,14 +37,13 @@ def showDetails():
     link = "https://adbimages.blob.core.windows.net/assignment1/"
     return render_template('ShowDetails.html', data = data, link = link)   
 
-@app.route('/ModifyComments', methods=['GET', 'POST'])
+@app.route('/Modify', methods=['GET', 'POST'])
 def update():
     cursor = connection.cursor()   
-    name =  request.form.get("name")
-    comments = request.form.get("Comments")
-    cursor.execute("select * from dbo.data where class ={}".format(comments))
+    name =  request.form.get("Name")    
+    cursor.execute("select * from dbo.[data-1] where name ={}".format(name))
     data = cursor.fetchall()    
-    return render_template('ShowAllRecords.html', data = data)     
+    return render_template('ModifyForm.html', data = data)     
 
 
 if __name__ == '__main__':    
