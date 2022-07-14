@@ -1,3 +1,4 @@
+import string
 import time
 import pyodbc
 import os
@@ -41,9 +42,28 @@ def showDetails():
 def update():
     cursor = connection.cursor()   
     name =  request.form.get("Name")    
-    cursor.execute("select * from dbo.[data-1] where name ={}".format(name))
-    data = cursor.fetchall()    
-    return render_template('ModifyForm.html', data = data)     
+    cursor.execute("select * from dbo.[data-1] a where a.name = '"+name+"'")
+    data = cursor.fetchall()  
+    comments = data[0][4]
+    print(comments)
+    name = data[0][0]
+    classno = data[0][2]
+    print(data[0]) 
+    return render_template('ModifyForm.html', comments = comments, name = name, classno=classno)  
+
+
+@app.route('/ModifySubmit', methods=['GET', 'POST'])
+def modifySubmit():
+    cursor = connection.cursor()   
+    name =  request.form.get("Name")  
+    classnumber = int(request.form.get("ClassNumber"))
+    comments = request.form.get("Comments")
+    print(comments)
+    sqlq = "UPDATE dbo.[data-1] SET class = "+str(classnumber)+", comments = '"+comments+"' WHERE name = '"+name+"'"   
+    print(sqlq)
+    cursor.execute(sqlq)     
+    
+    return render_template('index.html')     
 
 
 if __name__ == '__main__':    
